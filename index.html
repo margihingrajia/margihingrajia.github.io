@@ -631,34 +631,57 @@
             margin-bottom: 0.75rem;
         }
 
+        .project-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: auto;
+        }
+
         .project-link {
-            width: 100%;
-            padding: 0.85rem;
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 0.7rem 0.9rem;
             border-radius: 2px;
             text-align: center;
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 700;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             border: 1px solid var(--border);
-            color: #fff;
+            color: var(--text-main);
             background: var(--bg-terminal);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+            white-space: nowrap;
         }
 
-        .project-card:hover .project-link {
+        .project-link i {
+            font-size: 0.95rem;
+        }
+
+        .project-link.link-code:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(0, 240, 255, 0.05);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .project-link.link-demo:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(0, 255, 102, 0.05);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.25);
+        }
+
+        .project-link.link-video:hover {
             border-color: var(--secondary);
             color: var(--secondary);
-        }
-
-        .project-link:hover {
-            background: var(--secondary) !important;
-            color: #fff !important;
+            background: var(--secondary-glow);
             box-shadow: 0 0 15px var(--secondary);
         }
 
@@ -1085,6 +1108,17 @@
                         <div class="project-tech-label">Impact</div>
                         <p class="project-description" style="color: var(--accent);">Improved retrieval relevance by 35%, simulated production-style data processing systems</p>
                     </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link link-code">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                        <a href="#" target="_blank" class="project-link link-demo">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                        <a href="#" target="_blank" class="project-link link-video">
+                            <i class="fab fa-youtube"></i> Video
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -1106,6 +1140,17 @@
                     <div class="project-tech" style="margin-top: 1.5rem;">
                         <div class="project-tech-label">Award</div>
                         <p class="project-description" style="color: var(--primary);">🏆 Best Design in Class for intuitive UI/UX and accessibility</p>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="project-link link-code">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                        <a href="#" target="_blank" class="project-link link-demo">
+                            <i class="fas fa-external-link-alt"></i> Live Demo
+                        </a>
+                        <a href="#" target="_blank" class="project-link link-video">
+                            <i class="fab fa-youtube"></i> Video
+                        </a>
                     </div>
                 </div>
             </div>
