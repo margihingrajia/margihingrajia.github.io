@@ -273,6 +273,29 @@
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0,0,0,0.6);
             overflow: hidden;
             position: relative;
+            animation: deck-float 5s ease-in-out infinite, deck-aura 6s ease-in-out infinite;
+        }
+
+        @keyframes deck-float {
+            0%, 100% { transform: translateY(0); }
+            50%     { transform: translateY(-8px); }
+        }
+
+        @keyframes deck-aura {
+            0%, 100% {
+                box-shadow:
+                    0 30px 60px rgba(0, 0, 0, 0.8),
+                    inset 0 0 20px rgba(0,0,0,0.6),
+                    0 0 30px rgba(0, 240, 255, 0.35);
+                border-color: rgba(0, 240, 255, 0.45);
+            }
+            50% {
+                box-shadow:
+                    0 30px 60px rgba(0, 0, 0, 0.8),
+                    inset 0 0 20px rgba(0,0,0,0.6),
+                    0 0 40px rgba(189, 0, 255, 0.45);
+                border-color: rgba(189, 0, 255, 0.5);
+            }
         }
 
         .cyber-deck::before {
@@ -281,6 +304,37 @@
             top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 30%, rgba(0, 240, 255, 0.05), transparent 70%);
             pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Rotating conic gradient ring behind the deck */
+        .cyber-deck::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 8px;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                var(--primary) 60deg,
+                transparent 120deg,
+                transparent 240deg,
+                var(--secondary) 300deg,
+                transparent 360deg
+            );
+            opacity: 0;
+            z-index: -1;
+            animation: deck-ring-spin 6s linear infinite;
+            transition: opacity 0.5s ease;
+            filter: blur(8px);
+        }
+
+        .cyber-deck:hover::after {
+            opacity: 0.9;
+        }
+
+        @keyframes deck-ring-spin {
+            to { transform: rotate(360deg); }
         }
 
         .deck-header {
@@ -327,18 +381,96 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .deck-body img {
             width: 100%;
             border-radius: 4px;
             border: 1px solid var(--border);
-            filter: hue-rotate(180deg) brightness(0.9) contrast(1.1);
-            transition: all 0.5s ease;
+            filter: saturate(1.05) contrast(1.05);
+            transition: filter 0.4s ease, transform 0.4s ease;
+            position: relative;
+            z-index: 1;
         }
 
+        /* Scanline sweep over the image */
+        .deck-body::before {
+            content: '';
+            position: absolute;
+            left: 1.5rem;
+            right: 1.5rem;
+            height: 6px;
+            top: 0;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            box-shadow: 0 0 12px var(--primary), 0 0 24px var(--primary);
+            opacity: 0.85;
+            z-index: 2;
+            pointer-events: none;
+            animation: scan-sweep 4.5s linear infinite;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes scan-sweep {
+            0%   { top: -10px;  opacity: 0; }
+            8%   { opacity: 0.9; }
+            92%  { opacity: 0.9; }
+            100% { top: calc(100% + 10px); opacity: 0; }
+        }
+
+        /* Static noise overlay (subtle, intensifies on hover) */
+        .deck-body::after {
+            content: '';
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            bottom: 1.5rem;
+            background-image: repeating-linear-gradient(
+                0deg,
+                rgba(255,255,255,0.03) 0px,
+                rgba(255,255,255,0.03) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            opacity: 0.4;
+            z-index: 2;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .cyber-deck:hover .deck-body::after {
+            opacity: 1;
+            animation: static-flicker 0.18s steps(2, end) infinite;
+        }
+
+        @keyframes static-flicker {
+            0%   { transform: translate(0, 0); }
+            25%  { transform: translate(-1px, 1px); }
+            50%  { transform: translate(1px, -1px); }
+            75%  { transform: translate(-1px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Glitch + RGB split on hover */
         .cyber-deck:hover .deck-body img {
-            filter: hue-rotate(0deg) brightness(1) contrast(1);
+            animation: img-glitch 0.5s steps(2, end) 1;
+            transform: scale(1.02);
+            filter:
+                saturate(1.2) contrast(1.1)
+                drop-shadow(2px 0 0 rgba(0, 240, 255, 0.55))
+                drop-shadow(-2px 0 0 rgba(189, 0, 255, 0.55));
+        }
+
+        @keyframes img-glitch {
+            0%   { clip-path: inset(0 0 0 0);     transform: translate(0,0)        scale(1.02); }
+            15%  { clip-path: inset(8% 0 80% 0); transform: translate(-3px, 1px)  scale(1.02); }
+            30%  { clip-path: inset(40% 0 30% 0); transform: translate(4px, -2px) scale(1.02); }
+            45%  { clip-path: inset(70% 0 5% 0);  transform: translate(-2px, 2px) scale(1.02); }
+            60%  { clip-path: inset(20% 0 60% 0); transform: translate(3px, 1px)  scale(1.02); }
+            75%  { clip-path: inset(0 0 0 0);     transform: translate(-1px, -1px) scale(1.02); }
+            100% { clip-path: inset(0 0 0 0);     transform: translate(0, 0)       scale(1.02); }
         }
 
         /* Core Section Blocks */
